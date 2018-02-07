@@ -3,6 +3,9 @@ using System.Net.Sockets;
 
 namespace NthDeveloper.TelnetServer
 {
+    /// <summary>
+    /// A connected client
+    /// </summary>
     public sealed class ClientInfo
     {
         readonly string m_ClientID;

@@ -3,26 +3,31 @@ using System.Collections.Generic;
 
 namespace NthDeveloper.TelnetServer
 {
+    /// <summary>
+    /// Interface for Telnet commands
+    /// </summary>
     public interface ITelnetCommand
     {
+        /// <summary>
+        /// Name of the command
+        /// </summary>
         string CommandName { get; }
+
+        /// <summary>
+        /// Help description for this command
+        /// </summary>
         string Description { get; }
+
+        /// <summary>
+        /// Parameter definitions of this command (only used for displaying parameter help information)
+        /// </summary>
         IEnumerable<CommandParameter> Parameters { get; }
 
+        /// <summary>
+        /// Executes the command with entered parameters
+        /// </summary>
+        /// <param name="parameters">Parameters entered by the Telnet user</param>
+        /// <returns>Returns <see cref="T:NthDeveloper.TelnetServer.TelnetCommandResult" /> </returns>
         TelnetCommandResult Execute(Dictionary<string, string> parameters);
-    }
-
-    public struct CommandParameter
-    {
-        public string Name { get; private set; }
-        public bool IsRequired { get; private set; }
-        public string Description { get; private set; }
-
-        public CommandParameter(string name, bool isRequired, string description)
-        {
-            this.Name = name;
-            this.IsRequired = isRequired;
-            this.Description = description;
-        }
-    }
+    }    
 }

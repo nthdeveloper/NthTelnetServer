@@ -5,6 +5,10 @@ namespace NthDeveloper.TelnetServer
 {
     partial class TelnetService
     {
+        /// <summary>
+        /// Help command. Only for listing available commands.
+        /// Real execution is done in TelnetService class.
+        /// </summary>
         class HelpCommand : ITelnetCommand
         {
             readonly CommandParameter[] m_Parameters;
@@ -35,6 +39,10 @@ namespace NthDeveloper.TelnetServer
             }
         }
 
+        /// <summary>
+        /// Exit command. Only for listing available commands.
+        /// Real execution is done in TelnetService class.
+        /// </summary>
         class ExitCommand : ITelnetCommand
         {
             public string CommandName
