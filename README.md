@@ -1,5 +1,5 @@
 ﻿# Nth Telnet Service
-Very simple Telnet server written in C#. You can add your own commands and enable password control when accessing the telnet server.
+Very simple Telnet server written in C#. You can add your own commands and enable password control for connecting to the telnet server.
 
 ## Features
 - Very simple, can be used with only two lines of codes
@@ -32,7 +32,8 @@ _telnetService.Start(_telnetSettings);
 ```
 
 - **Add custom commands**
-You can pass your custom commands to the TelnetService as the constructor parameter
+
+You can pass your custom commands to the TelnetService as a constructor parameter
 ```csharp
 TelnetService _telnetService = new TelnetService(new ITelnetCommand[]
 {
@@ -40,3 +41,13 @@ TelnetService _telnetService = new TelnetService(new ITelnetCommand[]
     new EchoCommand()
 });
 ```
+
+## Sample console screenshots
+
+- Help command usage
+
+![Help command usage](/Docs/images/help_usage.png)
+
+- Custom command usage with not parameters and one parameter
+
+![Help command usage](/Docs/images/sample_command_usages.png)
