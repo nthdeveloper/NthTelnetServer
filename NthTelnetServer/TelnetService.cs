@@ -52,14 +52,14 @@ namespace NthDeveloper.TelnetServer
             get { return m_Settings.Clone(); }
         }
 
-        public TelnetService(ITelnetCommand[] commands)
+        public TelnetService(ITelnetCommand[] customCommands)
         {
             m_TCPServer = new TCPServer();
             m_Clients = new ConcurrentDictionary<string, ConnectedClient>();
             m_ReceivedCommands = new ConcurrentQueue<ReceivedCommandItem>();
             m_Settings = new TelnetServiceSettings();
 
-            buildCommandsCatalog(commands ?? new ITelnetCommand[0]);
+            buildCommandsCatalog(customCommands ?? new ITelnetCommand[0]);
         }
 
         public bool Start(TelnetServiceSettings settings)
@@ -116,20 +116,20 @@ namespace NthDeveloper.TelnetServer
             clearClientsAndReceivedCommands();
         }
 
-        private void buildCommandsCatalog(ITelnetCommand[] externalCommands)
+        private void buildCommandsCatalog(ITelnetCommand[] customCommands)
         {
-            m_Commands = new Dictionary<string, ITelnetCommand>(externalCommands.Length + 2);
+            m_Commands = new Dictionary<string, ITelnetCommand>(customCommands.Length + 2);
 
-            var internalCommands = Assembly.GetAssembly(typeof(ITelnetCommand)).GetTypes()
+            var _builtInCommands = Assembly.GetAssembly(typeof(ITelnetCommand)).GetTypes()
                 .Where(x => !x.IsInterface && typeof(ITelnetCommand).IsAssignableFrom(x));
 
-            foreach (Type commandType in internalCommands)
+            foreach (Type commandType in _builtInCommands)
             {
                 addCommandToCatalog((ITelnetCommand)Activator.CreateInstance(commandType));
             }
 
-            for (int i = 0; i < externalCommands.Length; i++)
-                addCommandToCatalog(externalCommands[i]);
+            for (int i = 0; i < customCommands.Length; i++)
+                addCommandToCatalog(customCommands[i]);
         } 
         
         private void addCommandToCatalog(ITelnetCommand command)
@@ -414,10 +414,10 @@ namespace NthDeveloper.TelnetServer
             if (data.Length == 0)
                 return;
 
-            if (data[0] == 127)//Delete key
+            if (data[0] == 127)//Ignore delete key
                 return;
 
-            //Ok tuşları kontrolü yap
+            //Ignore arrow keys
             if (data.Length == 3)
             {
                 if (data[0] == 27 && data[1] == 91)
@@ -433,7 +433,7 @@ namespace NthDeveloper.TelnetServer
             int _startIndex = 0;
             do
             {
-                if (data[_startIndex] == (byte)255)//Telnet el sıkışma datalarını atla
+                if (data[_startIndex] == (byte)255)//Skip Telnet handshaking data
                 {
                     _startIndex += 3;
                 }
@@ -473,7 +473,7 @@ namespace NthDeveloper.TelnetServer
 
                         if (!String.IsNullOrEmpty(_cmd))
                         {
-                            if (_connectedClient.IsLoginRequired)//login olmamış
+                            if (_connectedClient.IsLoginRequired)//Has not logged in yet
                             {
                                 _connectedClient.CommandBuffer = String.Empty;
 
