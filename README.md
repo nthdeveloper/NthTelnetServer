@@ -48,6 +48,6 @@ TelnetService _telnetService = new TelnetService(new ITelnetCommand[]
 
 ![Help command usage](/Docs/images/help_usage.png)
 
-- Custom command usage with not parameters and one parameter
+- Custom command usage with no parameters and one parameter
 
 ![Help command usage](/Docs/images/sample_command_usages.png)
