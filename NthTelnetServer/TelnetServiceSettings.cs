@@ -3,8 +3,7 @@
 namespace NthDeveloper.TelnetServer
 {
     public class TelnetServiceSettings
-    {
-        public bool Enabled { get; set; }
+    {        
         public bool ListenAllAdapters { get; set; } = true;
         public string LocalIPAddress { get; set; }
         public int PortNumber { get; set; } = 32202;
