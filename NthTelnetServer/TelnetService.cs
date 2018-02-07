@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace NthDeveloper.TelnetServer
 {
-    public partial class TelnetService
+    public partial class TelnetService : ITelnetService
     {
         class ConnectedClient
         {
