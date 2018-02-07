@@ -34,7 +34,7 @@ namespace NthDeveloper.TelnetServer
         static readonly Regex TokenizerRegex = new Regex("(\"[^\"]+\")|([^ \":]+)|(:)", RegexOptions.Compiled);       
 
         bool m_IsRunning;
-        TCPServer m_TCPServer;
+        ITCPServer m_TCPServer;
         Thread m_thrCommandProcessor;
 
         Dictionary<string, ITelnetCommand> m_Commands;
@@ -52,9 +52,9 @@ namespace NthDeveloper.TelnetServer
             get { return m_Settings.Clone(); }
         }
 
-        public TelnetService(ITelnetCommand[] customCommands)
+        public TelnetService(ITCPServer tcpServer, ITelnetCommand[] customCommands)
         {
-            m_TCPServer = new TCPServer();
+            m_TCPServer = tcpServer;
             m_Clients = new ConcurrentDictionary<string, ConnectedClient>();
             m_ReceivedCommands = new ConcurrentQueue<ReceivedCommandItem>();
             m_Settings = new TelnetServiceSettings();
@@ -381,7 +381,7 @@ namespace NthDeveloper.TelnetServer
             return m_Settings.PromtText + ">";
         }
 
-        private void m_TCPServer_ClientConnected(TCPServer server, ClientInfo client)
+        private void m_TCPServer_ClientConnected(ITCPServer server, ClientInfo client)
         {
             ConnectedClient _connectedClient = new ConnectedClient();
             _connectedClient.Client = client;
@@ -396,7 +396,7 @@ namespace NthDeveloper.TelnetServer
                 promptLogin(_connectedClient);
         }
 
-        private void m_TCPServer_ClientDisconnected(TCPServer server, ClientInfo client)
+        private void m_TCPServer_ClientDisconnected(ITCPServer server, ClientInfo client)
         {
             ConnectedClient _connectedClient;
             if (m_Clients.TryRemove(client.ClientID, out _connectedClient))
@@ -405,7 +405,7 @@ namespace NthDeveloper.TelnetServer
             }
         }
 
-        private void m_TCPServer_DataReceived(TCPServer server, ClientInfo client, byte[] data)
+        private void m_TCPServer_DataReceived(ITCPServer server, ClientInfo client, byte[] data)
         {
             ConnectedClient _connectedClient;
             if (!m_Clients.TryGetValue(client.ClientID, out _connectedClient))

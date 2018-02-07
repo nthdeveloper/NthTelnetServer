@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace NthDeveloper.TelnetServer
 {
-    internal sealed class ClientInfo
+    public sealed class ClientInfo
     {
         readonly string m_ClientID;
         readonly Socket m_ClientSocket;

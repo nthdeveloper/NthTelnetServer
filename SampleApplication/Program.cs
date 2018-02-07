@@ -12,7 +12,9 @@ namespace SampleApplication
     {
         static void Main(string[] args)
         {
-            TelnetService _telnetService = new TelnetService(new ITelnetCommand[]
+            TelnetService _telnetService = new TelnetService(
+                new TCPServer(), 
+                new ITelnetCommand[]
             {
                 new HelloCommand(),
                 new EchoCommand()

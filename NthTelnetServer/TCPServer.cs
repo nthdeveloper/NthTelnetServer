@@ -4,11 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 
 namespace NthDeveloper.TelnetServer
-{    
-    delegate void ClientConnectionEventHandler(TCPServer server, ClientInfo client);
-    delegate void ClientDataEventHandler(TCPServer server, ClientInfo client, byte[] data);
-
-    internal sealed class TCPServer
+{
+    public sealed class TCPServer : ITCPServer
     {
         private Socket m_ServerSocket;
         private List<ClientInfo> m_Clients;        
@@ -39,9 +36,11 @@ namespace NthDeveloper.TelnetServer
                 m_ServerSocket.Listen(MaxWaitingClients);
                 m_ServerSocket.BeginAccept(new AsyncCallback(acceptCallback), m_ServerSocket);
             }
-            catch (Exception e)
+            catch
             {
-                //TODO: Log                
+                StopListening();
+
+                throw;
             }
         }
 
@@ -55,7 +54,7 @@ namespace NthDeveloper.TelnetServer
             {
                 m_ServerSocket.Close();                
             }
-            catch(Exception){ }
+            catch{ }
 
             m_ServerSocket = null;
 
@@ -68,7 +67,7 @@ namespace NthDeveloper.TelnetServer
                 {
                     _client.ClientSocket.Close();                    
                 }
-                catch (Exception) { }
+                catch { }
 
                 m_Clients.RemoveAt(0);
             }
@@ -98,7 +97,7 @@ namespace NthDeveloper.TelnetServer
 
                 m_ServerSocket.BeginAccept(new AsyncCallback(acceptCallback), m_ServerSocket);
             }
-            catch (ObjectDisposedException e) { }
+            catch (ObjectDisposedException) { }
             catch (Exception e)
             {
                //TODO: Log
@@ -140,7 +139,7 @@ namespace NthDeveloper.TelnetServer
                         _ev(this, _clientInfo);
                 }
             }
-            catch(ObjectDisposedException e) { }
+            catch(ObjectDisposedException) { }
             catch(Exception e)
             {
                 //TODO: Log

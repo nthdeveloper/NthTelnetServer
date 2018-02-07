@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientInfo.cs" />
+    <Compile Include="ITCPServer.cs" />
     <Compile Include="ITelnetCommand.cs" />
     <Compile Include="ITelnetService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

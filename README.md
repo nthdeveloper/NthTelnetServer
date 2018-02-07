@@ -13,7 +13,7 @@ Very simple Telnet server written in C#. You can add your own commands and enabl
 - **The simplest way**
 ```csharp
 //Create the TelnetService object
-TelnetService _telnetService = new TelnetService(new ITelnetCommand[0]);
+TelnetService _telnetService = new TelnetService(new TCPServer(), new ITelnetCommand[0]);
 
 //Start with default settings
 _telnetService.Start(new TelnetServiceSettings());
@@ -21,7 +21,7 @@ _telnetService.Start(new TelnetServiceSettings());
 
 - **Start with custom settings**
 ```csharp
-TelnetService _telnetService = new TelnetService(new ITelnetCommand[0]);
+TelnetService _telnetService = new TelnetService(new TCPServer(), new ITelnetCommand[0]);
 
 TelnetServiceSettings _telnetSettings = new TelnetServiceSettings();
 _telnetSettings.PromtText = "SampleApp@" + Environment.MachineName;
@@ -35,7 +35,8 @@ _telnetService.Start(_telnetSettings);
 
 You can pass your custom commands to the TelnetService as a constructor parameter
 ```csharp
-TelnetService _telnetService = new TelnetService(new ITelnetCommand[]
+TelnetService _telnetService = new TelnetService(new TCPServer(), 
+new ITelnetCommand[]
 {
     new HelloCommand(),
     new EchoCommand()
